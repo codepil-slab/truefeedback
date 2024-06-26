@@ -16,7 +16,7 @@ import { useCallback, useEffect, useState } from "react"
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
-const dashboard = () => {
+export default function DashboardPage() {
 
   const [messages, setMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState<Boolean>(false);
@@ -191,4 +191,3 @@ const dashboard = () => {
   )
 }
 
-export default dashboard
