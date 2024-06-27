@@ -19,7 +19,7 @@ import { toast } from "@/components/ui/use-toast"
 import { messageSchema } from "@/schemas/messageSchema"
 import axios, { AxiosError } from "axios"
 import { ApiResponse } from "@/types/ApiResponse"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Loader2 } from "lucide-react"
 import Link from "next/link"
 import { Separator } from "@/components/ui/separator"
@@ -54,11 +54,21 @@ const SendFeedbackPage = ({ params }: { params: { username: string } }) => {
         complete,
         completion,
         isLoading: isSuggestMessagesLoading,
-        error
+        error,
     } = useCompletion({
         api: "/api/suggest-messages",
         initialCompletion: initialMessageString,
     })
+
+    useEffect(() => {
+        if (error) {
+            toast({
+                title: "Error",
+                description: error.message,
+                variant: "destructive"
+            })
+        }
+    }, [error])
 
 
     const handleMessageClick = (message: string) => {

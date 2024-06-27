@@ -24,8 +24,25 @@ export default function DashboardPage() {
 
   const { toast } = useToast();
 
-  const handleDeleteMessage = (messageId: string) => {
-    setMessages(messages.filter((message) => message._id !== messageId));
+  const handleDeleteMessage = async (messageId: string) => {
+    try {
+      setMessages(messages.filter((message) => message._id !== messageId));
+      const response = await axios.delete<ApiResponse>(
+        `/api/delete-message/${messageId}`
+      );
+      toast({
+        title: response.data.message,
+      });
+    } catch (error) {
+      setMessages(messages);
+      const axiosError = error as AxiosError<ApiResponse>;
+      toast({
+        title: 'Error',
+        description:
+          axiosError.response?.data.message ?? 'Failed to delete message',
+        variant: 'destructive',
+      });
+    }
   }
 
   const { data: session } = useSession();
