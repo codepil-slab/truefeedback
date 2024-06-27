@@ -58,8 +58,10 @@ export default function DashboardPage() {
   const fetchAcceptMessage = useCallback(async () => {
     setIsSwitchLoading(true);
     try {
-      const response = await axios.get<ApiResponse>(`/api/accept-messages`)
-      setValue("acceptMessage", response.data.isAcceptingMessage)
+      const response = await fetch(`/api/accept-messages`);
+      const data: ApiResponse = await response.json();
+      // const response = await axios.get<ApiResponse>(`/api/accept-messages`)
+      setValue("acceptMessage", data.isAcceptingMessage)
     } catch (error) {
       const axiosError = error as AxiosError<ApiResponse>;
       toast({
@@ -78,8 +80,10 @@ export default function DashboardPage() {
     setIsLoading(true);
     setIsSwitchLoading(false);
     try {
-      const response = await axios.get<ApiResponse>(`/api/get-messages`)
-      setMessages(response.data?.messages || [])
+      const response = await fetch(`/api/get-messages`);
+      const data: ApiResponse = await response.json();
+      // const response = await axios.get<ApiResponse>(`/api/get-messages`)
+      setMessages(data?.messages || [])
       if (refresh) {
         toast({
           title: "Refreshing",
@@ -105,7 +109,7 @@ export default function DashboardPage() {
     fetchMessages();
     fetchAcceptMessage();
 
-  }, [session, setValue, fetchAcceptMessage, fetchMessages, toast])
+  }, [session])
 
   // handle switch change
 
